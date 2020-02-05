@@ -7,22 +7,22 @@ body {
 /*INITIAL SCREEN*/
 
 .iscreen-button {
-    color:#000;
-    background-color:#ddd;
+    color: #000;
+    background-color: #ddd;
     font-size: 16px;
     outline: none;
     font-family: sans-serif;
     border: 0;
     width: 50%;
     margin-top: 7%;
-	text-transform:uppercase;
-    border-radius:2px;
+    text-transform: uppercase;
+    border-radius: 2px;
     height: 8%;
-	cursor:pointer;
+    cursor: pointer;
 }
 
 .iscreen-button:hover {
-    background-color:#ccc;
+    background-color: #ccc;
 }
 
 .iscreen-h1 {
@@ -74,15 +74,15 @@ body {
 .iscreen-p {
     font-family: sans-serif;
     font-size: 20px;
-    text-align: center;    
+    text-align: center;
 }
 
 .iscreen-register-p {
     font-family: sans-serif;
     font-size: 18px;
-    text-align: center; 
+    text-align: center;
     margin-top: 3%;
-    margin-bottom: 2%;   
+    margin-bottom: 2%;
 }
 
 #iscreen-info {
@@ -90,7 +90,6 @@ body {
     left: 25%;
     justify-cntent: center;
     align-items: center;
-    
 }
 
 #iscreen-login {
@@ -105,14 +104,14 @@ body {
     height: 78%;
 }
 
-#iscreen-register-birth{
+#iscreen-register-birth {
     display: flex;
     flex-direction: row;
     margin: 3%;
-    font-family: sans-serif; 
+    font-family: sans-serif;
 }
 
-#iscreen-register-gender{
+#iscreen-register-gender {
     display: flex;
     flex-direction: row;
     margin: 3%;
@@ -121,6 +120,179 @@ body {
 
 /*CHAT SCREEN*/
 
+#navbar {
+    display: flex;
+    height: 6vh;
+    font-family: sans-serif;
+    border-bottom: #aaa solid 1px;
+}
+
+#navbar-title {
+    display: flex;
+    flex-direction: row;
+    width: 20vw;
+    justify-content: center;
+    align-items: center;
+    border-right: #aaa solid 1px;
+}
+
+#navbar-title-text {
+    font-size: 2em;
+}
+
+#navbar-title-img {
+    width: 1.7em;
+    padding: 0.5em;
+}
+
+#navbar-chat-info {
+    display: flex;
+    flex-direction: row;
+    width: 55vw;
+    align-items: center;
+}
+
+#navbar-chat-info-img {
+    width: 3em;
+    margin: 0.5em;
+}
+
+#navbar-chat-info-name {
+    font-size: 1.7em;
+}
+
+#navbar-chat-online {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    width: 5vw;
+    border-right: #aaa solid 1px;
+}
+
+#navbar-chat-online-text {
+    font-size: 1em;
+    margin-right: 0.4em;
+}
+
+#navbar-chat-search {
+    display: flex;
+    flex-direction: row-reverse;
+    width: 20vw;
+    align-items: center;
+}
+
+#navbar-chat-search-img {
+    height: 2.5em;
+    cursor: pointer;
+}
+
+#navbar-chat-search-input {
+    height: 1.5em;
+    width: 100%;
+    padding: 0.2em;
+    margin-left: 0.5em;
+}
+
+#app {
+    display: flex;
+    flex-direction: row;
+    font-family: sans-serif;
+}
+
+#chat-list {
+    display: flex;
+    flex-direction: column;
+    width: 20vw;
+    height: 94vh;
+    border-right: #aaa solid 1px;
+}
+
+#chat-list-search {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 5vh;
+    border-bottom: #aaa solid 1px;
+}
+
+#chat-list-search-input {
+    height: 1.5em;
+    width: 70%;
+    padding: 0.2em;
+}
+
+#chat-list-search-img {
+    height: 2em;
+    cursor: pointer;
+}
+
+#chat {
+    width: 80vw;
+    height: 94vh;
+    display: flex;
+    flex-direction: column;
+}
+
+#chat-messages {
+    height: 88vh;
+    border-bottom: #aaa solid 1px;
+}
+
+#chat-add-message {
+    height: 6vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#chat-add-message-input {
+    height: 2em;
+    width: 100%;
+    padding: 0.2em;
+    margin-left: 0.5em;
+}
+
+#chat-add-message-img {
+    height: 3em;
+    cursor: pointer;
+}
+
+#chat-search {
+    border-left: #aaa solid 1px;
+}
+
+.contactli {
+    cursor: pointer;
+    font-family: sans-serif;
+    text-align: center;
+    word-wrap: normal;
+    padding: 0.4em;
+    border-bottom: 1px solid #aaa;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.contactli:hover {
+    background-color: #eee;
+}
+
+.contactmessage-container {
+    border-bottom: 1px solid #aaa;
+    cursor: pointer;
+    word-wrap: normal;
+    padding: 0.4em;
+    font-size: 1em;
+    display: flex;
+    flex-direction: row;
+}
+
+.contactmessage-container:hover {
+    background-color: #eee;
+}
+
+/*
 .friendli{
     cursor: pointer;
     font-family: verdana;
@@ -221,6 +393,7 @@ body {
 
 #app{
     display: flex;
+    font-family: sans-serif;
 }
 
 #chat{
@@ -255,23 +428,27 @@ body {
     overflow-y: auto;
 }
 
-#nav-bar{
+#navbar{
     position: sticky;
     display: flex;
     height: 6vh;
 }
 
-#nav-bar-chat-info{
+#navbar-chat-info{
     flex-basis: 65%;
     border: 1px solid #000;
     display: flex;
-    font-family: sans-serif;
     font-size: 1.4em;
     align-items: center;
-    justify-content: center;
+    justfy-content: center;
 }
 
-#nav-bar-menu{
+#navbar-chat-info-img{
+    width: 2em;
+    margin: 0.3em;
+}
+
+#navbar-search{
     flex-basis: 20%;
     display: flex;
     border: 1px solid #000;
@@ -279,12 +456,12 @@ body {
     justify-content: center;
 }
 
-#nav-bar-menu-img-search{
+#navbar-menu-img-search{
     height: 1.5em;
     cursor: pointer;
 }
 
-#nav-bar-menu-query{
+#navbar-menu-query{
     max-width: 14vw;
     padding:  0.1em 0.7em;
     margin: 0 0.3em 0.1em 0.3em;
@@ -292,26 +469,25 @@ body {
     border-color: #333;
     border-radius: 2em;
     box-sizing: border-box;
-    font-family: 'Roboto',sans-serif;
     color: #000;
     text-align: center;
 }
 
-#nav-bar-title{
+#navbar-title{
     flex-basis: 15%;
     display: flex;
     border: 1px solid #000;
-    font-family: sans-serif;
     align-items: center;
     justify-content: center;
 }
 
-#nav-bar-title-img{
+#navbar-title-img{
     cursor: pointer;
     height: 1.3em;
     margin: 0.3em;
 }
 
-#nav-bar-title-text{
+#navbar-title-text{
     font-size: calc(2vw);
 }
+*/
