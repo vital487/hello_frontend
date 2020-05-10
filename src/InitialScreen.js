@@ -1,254 +1,286 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
+import { login, register, validateToken } from './ajax';
+import { setCookie, isValidDate, getCookie, eraseCookie } from './lib';
 
 class InitialScreen extends React.Component {
-    constructor (props) {
+    constructor(props) {
         super(props);
 
-        this.login = this.login.bind(this);
-        this.register = this.register.bind(this);
+        //Verify if token is validy
+        let token = getCookie("token");
+
+        if (token != null) {
+            validateToken(token)
+                .then(response => {
+                    this.props.history.push("/chat");
+                })
+                .catch(response => {
+                    eraseCookie("token");
+                });
+        }
+
+        this.handleClickLogin = this.handleClickLogin.bind(this);
+        this.handleClickRegister = this.handleClickRegister.bind(this);
+        this.toLogin = this.toLogin.bind(this);
+        this.toRegister = this.toRegister.bind(this);
+        this.handleKeyLogin = this.handleKeyLogin.bind(this);
+        this.handleKeyRegister = this.handleKeyRegister.bind(this);
     }
-    
+
     render() {
+        document.body.style.backgroundColor = '#eee';
+
+        let days = [];
+        let months = [];
+        let years = [];
+
+        for (let i = 1; i < 32; i++) {
+            days.push(<option key={Math.random()}>{i}</option>);
+        }
+
+        for (let i = 1; i < 13; i++) {
+            months.push(<option key={Math.random()}>{i}</option>);
+        }
+
+        for (let i = 1900; i < new Date().getFullYear() + 1; i++) {
+            years.push(<option key={Math.random()}>{i}</option>);
+        }
+
         return (
             <div>
-                {/*<div id="iscreen-info" className="iscreen-div">
-                    <h1 className="iscreen-h1">Hello!</h1>
-                    {<img alt="" src={icon} style={{width: window.screen.width * 0.2 * 0.3 + "px"}}/>}
-                    <p className="iscreen-info-p">Com a nova aplicação <b>Hello!</b> podes falar com todos os teus amigos de forma</p>
-                    <p className="iscreen-info-p">fácil e</p>
-                    <p className="iscreen-info-p">simples</p>
-                    <p className="iscreen-info-p">para todos.</p>
-                </div>*/}
-
                 <div id="iscreen-login" className="iscreen-div">
                     <h1 className="iscreen-h1">Hello!</h1>
                     <p className="iscreen-p">Email</p>
-                    <input className="iscreen-input" id="email" type="mail" />
+                    <input id="login-email" className="iscreen-input" type="mail" onKeyUp={(keyEvent) => this.handleKeyLogin(keyEvent)} onChange={this.handleChangeTextLogin} />
                     <p className="iscreen-p">Password</p>
-                    <input className="iscreen-input" type="password" />
-                    <button id="iscreen-login-button" className="iscreen-button" onClick={this.login}>Iniciar Sessão</button>
+                    <input id="login-password" className="iscreen-input" type="password" onKeyUp={(keyEvent) => this.handleKeyLogin(keyEvent)} onChange={this.handleChangeTextLogin} />
+                    <button id="iscreen-login-button" className="iscreen-button" onClick={this.handleClickLogin}>Iniciar Sessão</button>
                     <button className="iscreen-button" onClick={this.toRegister}>Registar</button>
+                    <span id="iscreen-login-error-message" className="iscreen-error-message">Password Errada</span>
                 </div>
 
                 <div id="iscreen-register" className="iscreen-div">
                     <h1 className="iscreen-h1">Hello!</h1>
-                    <p className="iscreen-register-p">Nome</p>
-                    <input className="iscreen-input" type="text" />
+                    <p className="iscreen-register-p">Nome Próprio</p>
+                    <input id="iscreen-register-firstname" className="iscreen-input" type="text" onKeyUp={(keyEvent) => this.handleKeyRegister(keyEvent)} onChange={this.handleChangeTextRegister} />
                     <p className="iscreen-register-p">Apelido</p>
-                    <input className="iscreen-input" type="text" />
+                    <input id="iscreen-register-surname" className="iscreen-input" type="text" onKeyUp={(keyEvent) => this.handleKeyRegister(keyEvent)} onChange={this.handleChangeTextRegister} />
                     <p className="iscreen-register-p">Email</p>
-                    <input className="iscreen-input" type="mail" />
+                    <input id="iscreen-register-email" className="iscreen-input" type="mail" onKeyUp={(keyEvent) => this.handleKeyRegister(keyEvent)} onChange={this.handleChangeTextRegister} />
                     <p className="iscreen-register-p">Password</p>
-                    <input className="iscreen-input" type="password" />
+                    <input id="iscreen-register-password" className="iscreen-input" type="password" onKeyUp={(keyEvent) => this.handleKeyRegister(keyEvent)} onChange={this.handleChangeTextRegister} />
                     <p className="iscreen-register-p">Repetir Password</p>
-                    <input className="iscreen-input" type="password" />
+                    <input id="iscreen-register-repeat-password" className="iscreen-input" type="password" onKeyUp={(keyEvent) => this.handleKeyRegister(keyEvent)} onChange={this.handleChangeTextRegister} />
                     <p className="iscreen-register-p">Género</p>
                     <div id="iscreen-register-gender">
 
-                        <input type="radio" name="gender" value="male" />
+                        <input id="iscreen-register-male" type="radio" name="gender" value="male" onKeyUp={(keyEvent) => this.handleKeyRegister(keyEvent)} onChange={this.handleChangeTextRegister} />
                         <span>Masculino</span>
-                        <input type="radio" name="gender" value="female" />
+                        <input id="iscreen-register-female" type="radio" name="gender" value="female" onKeyUp={(keyEvent) => this.handleKeyRegister(keyEvent)} onChange={this.handleChangeTextRegister} />
                         <span>Feminino</span>
+                        
                     </div>
                     <p className="iscreen-register-p">Data de Nascimento</p>
                     <div id="iscreen-register-birth">
-                        <select>
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                            <option>6</option>
-                            <option>7</option>
-                            <option>8</option>
-                            <option>9</option>
-                            <option>10</option>
-                            <option>11</option>
-                            <option>12</option>
-                            <option>13</option>
-                            <option>14</option>
-                            <option>15</option>
-                            <option>16</option>
-                            <option>17</option>
-                            <option>18</option>
-                            <option>19</option>
-                            <option>20</option>
-                            <option>21</option>
-                            <option>22</option>
-                            <option>23</option>
-                            <option>24</option>
-                            <option>25</option>
-                            <option>26</option>
-                            <option>27</option>
-                            <option>28</option>
-                            <option>29</option>
-                            <option>30</option>
-                            <option>31</option>
+                        <select id="iscreen-register-day" onChange={this.handleChangeTextRegister}>
+                            {days}
                         </select>
-                        <select>
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                            <option>6</option>
-                            <option>7</option>
-                            <option>8</option>
-                            <option>9</option>
-                            <option>10</option>
-                            <option>11</option>
-                            <option>12</option>
+                        <select id="iscreen-register-month" onChange={this.handleChangeTextRegister}>
+                            {months}
                         </select>
-                        <select>
-                            <option>1900</option>
-                            <option>1901</option>
-                            <option>1902</option>
-                            <option>1903</option>
-                            <option>1904</option>
-                            <option>1905</option>
-                            <option>1906</option>
-                            <option>1907</option>
-                            <option>1908</option>
-                            <option>1909</option>
-                            <option>1910</option>
-                            <option>1911</option>
-                            <option>1912</option>
-                            <option>1913</option>
-                            <option>1914</option>
-                            <option>1915</option>
-                            <option>1916</option>
-                            <option>1917</option>
-                            <option>1918</option>
-                            <option>1919</option>
-                            <option>1920</option>
-                            <option>1921</option>
-                            <option>1922</option>
-                            <option>1923</option>
-                            <option>1924</option>
-                            <option>1925</option>
-                            <option>1926</option>
-                            <option>1927</option>
-                            <option>1928</option>
-                            <option>1929</option>
-                            <option>1930</option>
-                            <option>1931</option>
-                            <option>1932</option>
-                            <option>1933</option>
-                            <option>1934</option>
-                            <option>1935</option>
-                            <option>1936</option>
-                            <option>1937</option>
-                            <option>1938</option>
-                            <option>1939</option>
-                            <option>1940</option>
-                            <option>1941</option>
-                            <option>1942</option>
-                            <option>1943</option>
-                            <option>1944</option>
-                            <option>1945</option>
-                            <option>1946</option>
-                            <option>1947</option>
-                            <option>1948</option>
-                            <option>1949</option>
-                            <option>1950</option>
-                            <option>1951</option>
-                            <option>1952</option>
-                            <option>1953</option>
-                            <option>1954</option>
-                            <option>1955</option>
-                            <option>1956</option>
-                            <option>1957</option>
-                            <option>1958</option>
-                            <option>1959</option>
-                            <option>1960</option>
-                            <option>1961</option>
-                            <option>1962</option>
-                            <option>1963</option>
-                            <option>1964</option>
-                            <option>1965</option>
-                            <option>1966</option>
-                            <option>1967</option>
-                            <option>1968</option>
-                            <option>1969</option>
-                            <option>1970</option>
-                            <option>1971</option>
-                            <option>1972</option>
-                            <option>1973</option>
-                            <option>1974</option>
-                            <option>1975</option>
-                            <option>1976</option>
-                            <option>1977</option>
-                            <option>1978</option>
-                            <option>1979</option>
-                            <option>1980</option>
-                            <option>1981</option>
-                            <option>1982</option>
-                            <option>1983</option>
-                            <option>1984</option>
-                            <option>1985</option>
-                            <option>1986</option>
-                            <option>1987</option>
-                            <option>1988</option>
-                            <option>1989</option>
-                            <option>1990</option>
-                            <option>1991</option>
-                            <option>1992</option>
-                            <option>1993</option>
-                            <option>1994</option>
-                            <option>1995</option>
-                            <option>1996</option>
-                            <option>1997</option>
-                            <option>1998</option>
-                            <option>1999</option>
-                            <option>2000</option>
-                            <option>2001</option>
-                            <option>2002</option>
-                            <option>2003</option>
-                            <option>2004</option>
-                            <option>2005</option>
-                            <option>2006</option>
-                            <option>2007</option>
-                            <option>2008</option>
-                            <option>2009</option>
-                            <option>2010</option>
-                            <option>2011</option>
-                            <option>2012</option>
-                            <option>2013</option>
-                            <option>2014</option>
-                            <option>2015</option>
-                            <option>2016</option>
-                            <option>2017</option>
-                            <option>2018</option>
-                            <option>2019</option>
-                            <option>2020</option>
+                        <select id="iscreen-register-year" onChange={this.handleChangeTextRegister}>
+                            {years}
                         </select>
                     </div>
-                    <button className="iscreen-button" onClick={this.register}>Registar</button>
+                    <button className="iscreen-button" onClick={this.handleClickRegister}>Registar</button>
                     <button className="iscreen-button" onClick={this.toLogin}>Iniciar Sessão</button>
+                    <span id="iscreen-register-error-message" className="iscreen-error-message">Password Errada</span>
                 </div>
-            </div >
+            </div>
         );
     }
 
-    login() {
-        this.props.history.push("/chat");
+    componentDidMount() {       
+        let select = document.getElementById("iscreen-register-year");
+        select.selectedIndex = select.options.length - 30;
+
+        //this.connect();
     }
 
-    register() {
-        this.props.history.push("/chat");
+    handleKeyLogin(keyEvent) {
+        if (keyEvent.key === "Enter") {
+            this.handleClickLogin();
+        }
+    }
+
+    handleKeyRegister(keyEvent) {
+        if (keyEvent.key === "Enter") {
+            this.handleClickRegister();
+        }
+    }
+
+    handleChangeTextLogin() {
+        let error = document.getElementById("iscreen-login-error-message");
+
+        if (error.style.visibility === "visible") {
+            error.style.visibility = "hidden";
+        }
+    }
+
+    handleChangeTextRegister() {
+        let error = document.getElementById("iscreen-register-error-message");
+
+        if (error.style.visibility === "visible") {
+            error.style.visibility = "hidden";
+        }
+    }
+
+    handleClickLogin() {
+        let email = document.getElementById("login-email").value
+        let password = document.getElementById("login-password").value
+
+        this.handleChangeTextLogin();
+        document.body.style.cursor = "wait";
+
+        login({ email: email, password: password })
+            .then(response => {
+                setCookie("token", response.token, 1)
+                document.body.style.cursor = "default";
+                this.props.history.push("/chat");
+            })
+            .catch(response => {
+                document.getElementById("root").style.cursor = "default";
+                let error = document.getElementById("iscreen-login-error-message");
+
+                error.textContent = "Email ou password errados";
+                error.style.visibility = "visible";
+            });
+    }
+
+    handleClickRegister() {
+        let firstname = document.getElementById("iscreen-register-firstname").value;
+        let surname = document.getElementById("iscreen-register-surname").value;
+        let email = document.getElementById("iscreen-register-email").value;
+        let password = document.getElementById("iscreen-register-password").value;
+        let repeatPassword = document.getElementById("iscreen-register-repeat-password").value;
+        let male = document.getElementById("iscreen-register-male");
+        let female = document.getElementById("iscreen-register-female");
+        let day = document.getElementById("iscreen-register-day");
+        let month = document.getElementById("iscreen-register-month");
+        let year = document.getElementById("iscreen-register-year");
+
+        if (firstname.trim() === "") {
+            let error = document.getElementById("iscreen-register-error-message");
+            error.textContent = "Nome inválido";
+            error.style.visibility = "visible";
+            return;
+        }
+
+        if (surname.trim() === "") {
+            let error = document.getElementById("iscreen-register-error-message");
+            error.textContent = "Apelido inválido";
+            error.style.visibility = "visible";
+            return;
+        }
+
+        //let pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        let pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+        if (!pattern.test(email)) {
+            let error = document.getElementById("iscreen-register-error-message");
+            error.textContent = "Email inválido";
+            error.style.visibility = "visible";
+            return;
+        }
+
+        if (password.trim().length < 1) {
+            let error = document.getElementById("iscreen-register-error-message");
+            error.textContent = "Password inválida";
+            error.style.visibility = "visible";
+            return;
+        }
+
+        if (password !== repeatPassword) {
+            let error = document.getElementById("iscreen-register-error-message");
+            error.textContent = "Passwords não coincidem";
+            error.style.visibility = "visible";
+            return;
+        }
+
+        if (male.checked === female.checked) {
+            let error = document.getElementById("iscreen-register-error-message");
+            error.textContent = "Género inválido";
+            error.style.visibility = "visible";
+            return;
+        }
+
+        let dayInt = parseInt(day.value);
+        if (day.selectedIndex === -1 || dayInt < 1 || dayInt > 31) {
+            let error = document.getElementById("iscreen-register-error-message");
+            error.textContent = "Dia inválido";
+            error.style.visibility = "visible";
+            return;
+        }
+
+        let monthInt = parseInt(month.value);
+        if (month.selectedIndex === -1 || monthInt < 1 || monthInt > 12) {
+            let error = document.getElementById("iscreen-register-error-message");
+            error.textContent = "Mês inválido";
+            error.style.visibility = "visible";
+            return;
+        }
+
+        let yearInt = parseInt(year.value);
+        if (year.selectedIndex === -1 || yearInt < 1900 || yearInt > new Date().getFullYear()) {
+            let error = document.getElementById("iscreen-register-error-message");
+            error.textContent = "Ano inválido";
+            error.style.visibility = "visible";
+            return;
+        }
+
+        if (!isValidDate(yearInt, monthInt, dayInt)) {
+            let error = document.getElementById("iscreen-register-error-message");
+            error.textContent = "Data inválida";
+            error.style.visibility = "visible";
+            return;
+        }
+
+        this.handleChangeTextRegister();
+        document.body.style.cursor = "wait";
+
+        register({
+            firstname: firstname.trim(),
+            surname: surname.trim(),
+            email: email.trim(),
+            password: password,
+            gender: male.checked,
+            year: yearInt,
+            month: monthInt,
+            day: dayInt
+        })
+            .then(response => {
+                document.body.style.cursor = "default";
+                this.toLogin();
+            })
+            .catch(response => {
+                let error = document.getElementById("iscreen-register-error-message");
+                error.textContent = "Email já está a ser utilizado";
+                error.style.visibility = "visible";
+            });
     }
 
     toLogin() {
+        this.handleChangeTextRegister();
         document.getElementById("iscreen-login").style.visibility = "visible";
         document.getElementById("iscreen-register").style.visibility = "hidden";
     }
 
     toRegister() {
+        this.handleChangeTextLogin();
         document.getElementById("iscreen-login").style.visibility = "hidden";
         document.getElementById("iscreen-register").style.visibility = "visible";
     }
 }
-
 
 export default withRouter(InitialScreen);
